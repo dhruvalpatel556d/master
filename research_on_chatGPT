@@ -1,0 +1,275 @@
+1. write a code for creating usertable using fname,lastname and id
+Here's an example code snippet in SQL to create a user table with columns for first name, last name, and ID:
+
+sql
+Copy code
+CREATE TABLE users (
+  id INT PRIMARY KEY,
+  fname VARCHAR(50),
+  lname VARCHAR(50)
+);
+This creates a table named users with three columns: id, fname, and lname. The id column is set as the primary key, which ensures that each row in the table has a unique ID value.
+
+To insert data into this table, you can use the INSERT INTO statement, like this:
+
+sql
+Copy code
+INSERT INTO users (id, fname, lname)
+VALUES (1, 'John', 'Doe'),
+       (2, 'Jane', 'Smith'),
+       (3, 'Bob', 'Johnson');
+This inserts three rows into the users table with the specified values for the id, fname, and lname columns.
+
+To query the data from the table, you can use the SELECT statement, like this:
+
+sql
+Copy code
+SELECT * FROM users;
+This returns all rows and columns from the users table.
+
+Of course, you can customize this code to suit your specific requirements, such as adding more columns or changing the data types of the columns.
+
+2. write a code to connect this user table from my php backend 
+Here's an example code snippet in PHP to connect to a MySQL database and query the users table created earlier:
+
+php
+Copy code
+// Replace these values with your own database credentials
+$host = 'localhost';
+$username = 'your-username';
+$password = 'your-password';
+$dbname = 'your-database-name';
+
+// Create a connection to the MySQL database
+$connection = mysqli_connect($host, $username, $password, $dbname);
+
+// Check if the connection was successful
+if (!$connection) {
+  die('Connection failed: ' . mysqli_connect_error());
+}
+
+// Query the users table and fetch the results
+$sql = "SELECT * FROM users";
+$result = mysqli_query($connection, $sql);
+
+// Display the results
+if (mysqli_num_rows($result) > 0) {
+  while ($row = mysqli_fetch_assoc($result)) {
+    echo "ID: " . $row["id"] . " - Name: " . $row["fname"] . " " . $row["lname"] . "<br>";
+  }
+} else {
+  echo "No users found.";
+}
+
+// Close the database connection
+mysqli_close($connection);
+This code first sets the database credentials (host, username, password, and database name), creates a connection to the MySQL database using the mysqli_connect function, and checks if the connection was successful using the mysqli_connect_error function.
+
+It then queries the users table using the mysqli_query function and fetches the results using the mysqli_fetch_assoc function. The results are displayed using an echo statement within a while loop.
+
+Finally, the code closes the database connection using the mysqli_close function.
+
+Note that this is just an example code snippet, and you should modify it to fit your specific needs and requirements. Also, be sure to properly secure your database connection and sanitize user input to prevent SQL injection attacks.
+
+3. if (mysqli_num_rows($result) > 0) {
+  while ($row = mysqli_fetch_assoc($result)) {
+    echo "ID: " . $row["id"] . " - Name: " . $row["fname"] . " " . $row["lname"] . "<br>";
+  }
+} else {
+  echo "No users found.";
+}
+
+write a code in different way
+Here's another way to write the code to display the contents of the users table using a foreach loop:
+
+php
+Copy code
+// Execute the query and store the result in a variable
+$result = mysqli_query($connection, "SELECT * FROM users");
+
+// If there are any rows in the result set, display them
+if (mysqli_num_rows($result) > 0) {
+  // Display a table header
+  echo "<table><tr><th>ID</th><th>First Name</th><th>Last Name</th></tr>";
+  
+  // Loop through each row in the result set
+  foreach ($result as $row) {
+    // Display the row data in a table row
+    echo "<tr><td>{$row['id']}</td><td>{$row['fname']}</td><td>{$row['lname']}</td></tr>";
+  }
+  
+  // Display the table closing tag
+  echo "</table>";
+} else {
+  // If there are no rows in the result set, display a message
+  echo "No users found.";
+}
+
+// Close the database connection
+mysqli_close($connection);
+This code first executes the SQL query using the mysqli_query function and stores the result in the $result variable.
+
+It then checks if there are any rows in the result set using the mysqli_num_rows function. If there are, it displays a table header and loops through each row in the result set using a foreach loop. It then displays the row data in a table row.
+
+If there are no rows in the result set, it displays a message indicating that no users were found.
+
+Finally, the code closes the database connection using the mysqli_close function.
+
+
+4.write a code who will get user record with fname = dhruval
+Here's an example code to retrieve the user record with fname equal to dhruval:
+
+php
+Copy code
+// Establish a database connection
+$connection = mysqli_connect("localhost", "username", "password", "database");
+
+// Check if the connection was successful
+if (!$connection) {
+  die("Connection failed: " . mysqli_connect_error());
+}
+
+// Prepare the SQL query
+$query = "SELECT * FROM users WHERE fname = 'dhruval'";
+
+// Execute the query and store the result in a variable
+$result = mysqli_query($connection, $query);
+
+// Check if there is exactly one row in the result set
+if (mysqli_num_rows($result) === 1) {
+  // Fetch the row data and store it in a variable
+  $row = mysqli_fetch_assoc($result);
+  
+  // Display the user data
+  echo "ID: " . $row["id"] . "<br>";
+  echo "First Name: " . $row["fname"] . "<br>";
+  echo "Last Name: " . $row["lname"] . "<br>";
+} else {
+  // Display an error message if there are zero or multiple rows in the result set
+  echo "Error: User not found or multiple users found.";
+}
+
+// Close the database connection
+mysqli_close($connection);
+This code first establishes a database connection using the mysqli_connect function and checks if the connection was successful using an if statement.
+
+It then prepares an SQL query to select all rows from the users table where the fname column is equal to 'dhruval'. The query is executed using the mysqli_query function, and the result is stored in the $result variable.
+
+The code then checks if there is exactly one row in the result set using an if statement and the mysqli_num_rows function. If there is exactly one row, the row data is fetched using the mysqli_fetch_assoc function and stored in the $row variable. The user data is then displayed using echo statements.
+
+If there are zero or multiple rows in the result set, the code displays an error message indicating that the user was not found or multiple users were found.
+
+Finally, the code closes the database connection using the mysqli_close function.
+
+5. write a code for join 3 table with student table exam table and study table in php
+Assuming that there are common columns in the three tables to join them, here's an example code for joining the student, exam, and study tables using PHP and MySQL:
+
+php
+Copy code
+<?php
+// establish database connection
+$servername = "localhost";
+$username = "username";
+$password = "password";
+$dbname = "database_name";
+
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+
+// check if connection is successful
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+// SQL query to join the tables
+$sql = "SELECT s.student_id, s.student_name, e.exam_score, st.study_hours 
+        FROM student s 
+        JOIN exam e ON s.student_id = e.student_id 
+        JOIN study st ON s.student_id = st.student_id 
+        WHERE s.student_name = 'dhruval'";
+
+// execute the query
+$result = mysqli_query($conn, $sql);
+
+// check if there are results
+if (mysqli_num_rows($result) > 0) {
+    // loop through each row and display the data
+    while ($row = mysqli_fetch_assoc($result)) {
+        echo "Student ID: " . $row["student_id"] . "<br>";
+        echo "Student Name: " . $row["student_name"] . "<br>";
+        echo "Exam Score: " . $row["exam_score"] . "<br>";
+        echo "Study Hours: " . $row["study_hours"] . "<br>";
+    }
+} else {
+    echo "No results found.";
+}
+
+// close the database connection
+mysqli_close($conn);
+?>
+This code will join the student, exam, and study tables based on their common student_id column and retrieve records for the student with student_name equal to dhruval. It will display the student ID, name, exam score, and study hours for that student.
+
+6. $array = array(
+  42 => array(56,86,97),
+  51 => array(64,52)
+);
+write code to make value as key 
+To make the values as keys in the nested array, you can use a foreach loop to iterate over the array and then use array_combine function to set the values as keys:
+
+php
+Copy code
+$newArray = array();
+foreach ($array as $key => $values) {
+  $newArray[$key] = array_combine($values, $values);
+}
+This code will create a new array where the keys of the outer array remain the same, but the values of the inner arrays are used as keys, with the corresponding value being the same as the key.
+
+For example, the above code will transform the original array:
+
+c
+Copy code
+$array = array(
+  42 => array(56, 86, 97),
+  51 => array(64, 52)
+);
+into the new array:
+
+php
+Copy code
+$newArray = array(
+  42 => array(56 => 56, 86 => 86, 97 => 97),
+  51 => array(64 => 64, 52 => 52)
+);
+
+
+
+Dhruval Patel
+$newArray = array();
+foreach ($array as $key => $values) {
+  $newArray[$key] = array_combine($values, $values);
+}
+write this code in different way
+To make the values as keys in the nested array, you can use the array_map() function to apply the array_combine() function to each inner array:
+
+bash
+Copy code
+$newArray = array_map(function($values) {
+  return array_combine($values, $values);
+}, $array);
+This code will create a new array where the keys of the outer array remain the same, but the values of the inner arrays are used as keys, with the corresponding value being the same as the key.
+
+For example, the above code will transform the original array:
+
+c
+Copy code
+$array = array(
+  42 => array(56, 86, 97),
+  51 => array(64, 52)
+);
+into the new array:
+
+php
+Copy code
+$newArray = array(
+  42 => array(56 => 56, 86 => 86, 97 => 97),
+  51 => array(64 => 64, 52 => 52)
+);
